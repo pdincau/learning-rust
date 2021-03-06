@@ -1,5 +1,14 @@
 It's just me trying to learn rust.
 
+
+### Topics:
+
+* [x] structs
+* [ ] vectors
+* [ ] traits   
+* [ ] builder pattern
+
+### Cargo commands
 Run checks:
 
 ```sh
@@ -17,4 +26,5 @@ Run code:
 ```sh
 $ cargo run
 ```
+
 
