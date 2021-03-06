@@ -9,6 +9,32 @@ pub struct Person2 {
     pub age: u8,
 }
 
+pub struct Developer {
+    name: String,
+    favourite_language: String,
+}
+
+impl Developer {
+    pub fn new(name: &'static str, favourite_language: &'static str) -> Self {
+        Self {
+            name: name.to_string(),
+            favourite_language: favourite_language.to_string(),
+        }
+    }
+
+    pub fn name(&self) -> &String {
+        &self.name
+    }
+
+    pub fn favourite_language(&self) -> &String {
+        &self.favourite_language
+    }
+
+    pub fn code(&self) -> () {
+        println!("I write code in: {}", self.favourite_language);
+    }
+}
+
 pub fn greet(person: &Person) -> () {
     println!("Hello {}", person.name)
 }

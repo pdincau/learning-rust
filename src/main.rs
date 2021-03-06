@@ -1,10 +1,18 @@
-use crate::structs::{greet, greet_without_borrowing, Person, Person2};
+use crate::structs::{greet, greet_without_borrowing, Developer, Person, Person2};
 
 mod structs;
 
 fn main() {
     base_struct_and_function();
-    base_struct_and_function_without_borrowing()
+    base_struct_and_function_without_borrowing();
+    more_stuff_on_structs();
+}
+
+fn more_stuff_on_structs() {
+    let developer = Developer::new("Paolo", "elixir");
+    let _name = developer.name();
+    let _favourite_language = developer.favourite_language();
+    developer.code();
 }
 
 fn base_struct_and_function() {
