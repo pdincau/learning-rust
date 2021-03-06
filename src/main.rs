@@ -9,9 +9,11 @@ fn main() {
 }
 
 fn more_stuff_on_structs() {
-    let developer = Developer::new("Paolo", "elixir");
+    let mut developer = Developer::new("Paolo", "elixir");
     let _name = developer.name();
     let _favourite_language = developer.favourite_language();
+    developer.code();
+    developer.learn_language("rust");
     developer.code();
 }
 

@@ -33,6 +33,10 @@ impl Developer {
     pub fn code(&self) -> () {
         println!("I write code in: {}", self.favourite_language);
     }
+
+    pub fn learn_language(&mut self, language: &'static str) -> () {
+        self.favourite_language = language.to_string();
+    }
 }
 
 pub fn greet(person: &Person) -> () {
