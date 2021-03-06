@@ -1,4 +1,5 @@
-use crate::structs::{greet, greet_without_borrowing, Developer, Person, Person2};
+use structs::developer::Developer;
+use structs::person::{greet, greet_without_borrowing, Person, Person2};
 
 mod structs;
 
