@@ -39,6 +39,13 @@ impl Developer {
     }
 }
 
+impl Default for Developer {
+    // this conflicts with #[derive(Default)]
+    fn default() -> Self {
+        Developer::new("Paolo", "erlang")
+    }
+}
+
 pub fn greet(person: &Person) -> () {
     println!("Hello {}", person.name)
 }

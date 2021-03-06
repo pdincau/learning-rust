@@ -15,6 +15,9 @@ fn more_stuff_on_structs() {
     developer.code();
     developer.learn_language("rust");
     developer.code();
+
+    let past_me = Developer::default();
+    past_me.code();
 }
 
 fn base_struct_and_function() {
