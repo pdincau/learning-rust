@@ -1,3 +1,4 @@
+use crate::structs::cook::CookBuilder;
 use structs::developer::Developer;
 use structs::person::{greet, greet_without_borrowing, Person, Person2};
 
@@ -7,6 +8,19 @@ fn main() {
     base_struct_and_function();
     base_struct_and_function_without_borrowing();
     more_stuff_on_structs();
+    builder_pattern_not_easy();
+}
+
+fn builder_pattern_not_easy() {
+    let cook = CookBuilder::new("paolo")
+        .specialty("pasta")
+        .specialty("risotto")
+        .build();
+
+    println!("Cook {} loves cooking:", cook.name);
+    for dish in cook.specialties.iter() {
+        println!("{}", dish)
+    }
 }
 
 fn more_stuff_on_structs() {
