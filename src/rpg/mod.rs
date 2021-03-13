@@ -2,21 +2,23 @@ use crate::rpg::State::{Alive, Dead};
 
 #[derive(Copy, Clone)]
 struct Character {
-    health: u16,
     level: u16,
     state: State,
 }
 
 impl Character {
     pub fn health(self) -> u16 {
-        self.health
+        match self.state {
+            State::Alive { life } => life,
+            Dead => 0
+        }
     }
 
     pub fn level(self) -> u16 {
         self.level
     }
 
-    pub fn state(self) -> State {
+    pub fn status(self) -> State {
         self.state
     }
 
@@ -25,28 +27,32 @@ impl Character {
     }
 
     fn receive_damage(&mut self, amount: u16) {
-        if amount >= self.health {
-            self.state = Dead;
-            self.health = 0;
-        } else {
-            self.health -= amount
+        match self.state {
+            State::Alive { life } => {
+                if amount >= life {
+                    self.state = Dead;
+                } else {
+                    self.state = Alive { life: life - amount }
+                }
+            },
+            Dead => ()
         }
+
     }
 }
 
 impl Default for Character {
     fn default() -> Self {
         Character {
-            health: 1000,
             level: 1,
-            state: Alive,
+            state: Alive { life: 1000 },
         }
     }
 }
 
 #[derive(Copy, Clone, Debug, PartialEq)]
 enum State {
-    Alive,
+    Alive { life: u16 },
     Dead,
 }
 
@@ -74,7 +80,7 @@ mod tests {
     fn starts_as_alive() {
         let character = Character::default();
 
-        assert_eq!(Alive, character.state());
+        assert_eq!(Alive { life: 1000 }, character.status());
     }
 
     #[test]
@@ -84,7 +90,7 @@ mod tests {
 
         attacker.deal_damage(&mut attackee, 10);
 
-        assert_eq!(990, attackee.health());
+        assert_eq!(Alive { life: 990 }, attackee.status());
     }
 
     #[test]
@@ -94,7 +100,6 @@ mod tests {
 
         attacker.deal_damage(&mut attackee, 1000);
 
-        assert_eq!(0, attackee.health());
-        assert_eq!(Dead, attackee.state());
+        assert_eq!(Dead, attackee.status());
     }
 }
