@@ -2,6 +2,12 @@ struct Character {
     health: u32
 }
 
+impl Character {
+    pub fn health(self) -> u32 {
+        self.health
+    }
+}
+
 #[cfg(test)]
 mod tests {
     // Note this useful idiom: importing names from outer (for mod tests) scope.
@@ -10,6 +16,7 @@ mod tests {
     #[test]
     fn health_starts_at_1000() {
         let character = Character { health: 1000 };
-        assert_eq!(1000, character.health);
+
+        assert_eq!(1000, character.health());
     }
 }
