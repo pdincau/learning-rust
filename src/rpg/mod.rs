@@ -1,5 +1,6 @@
 use crate::rpg::State::Alive;
 
+#[derive(Copy, Clone)]
 struct Character {
     health: u16,
     level: u16,
@@ -18,6 +19,14 @@ impl Character {
     pub fn state(self) -> State {
         self.state
     }
+
+    pub fn deal_damage(self, character: &mut Character, amount: u16) {
+        character.receive_damage(amount)
+    }
+
+    fn receive_damage(&mut self, amount: u16) {
+        self.health -= amount
+    }
 }
 
 impl Default for Character {
@@ -30,7 +39,7 @@ impl Default for Character {
     }
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Copy, Clone, Debug, PartialEq)]
 enum State {
     Alive,
     Dead,
@@ -60,5 +69,15 @@ mod tests {
         let character = Character::default();
 
         assert_eq!(Alive, character.state());
+    }
+
+    #[test]
+    fn deals_damage() {
+        let attacker = Character::default();
+        let mut attackee = Character::default();
+
+        attacker.deal_damage(&mut attackee, 10);
+
+        assert_eq!(990, attackee.health());
     }
 }
