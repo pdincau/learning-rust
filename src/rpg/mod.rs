@@ -26,6 +26,10 @@ impl Character {
         character.receive_damage(amount)
     }
 
+    pub fn heal(self, character: &mut Character) {
+        character.receive_healing()
+    }
+
     fn receive_damage(&mut self, amount: u16) {
         match self.state {
             State::Alive { life } if amount >= life => self.state = Dead,
@@ -34,6 +38,14 @@ impl Character {
                     life: life - amount,
                 }
             }
+            Dead => (),
+        }
+    }
+
+    fn receive_healing(&mut self) {
+        match self.state {
+            State::Alive { life: 1000 }  => (),
+            State::Alive { .. } => self.state = Alive { life: 1000 },
             Dead => (),
         }
     }
@@ -99,5 +111,17 @@ mod tests {
         attacker.deal_damage(&mut attackee, 1000);
 
         assert_eq!(Dead, attackee.status());
+    }
+
+    #[test]
+    fn heals() {
+        let attacker = Character::default();
+        let healer = Character::default();
+        let mut attackee = Character::default();
+
+        attacker.deal_damage(&mut attackee, 50);
+        healer.heal(&mut attackee);
+
+        assert_eq!(Alive { life: 1000 }, attackee.status());
     }
 }
