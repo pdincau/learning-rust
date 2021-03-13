@@ -44,7 +44,6 @@ impl Character {
     fn receive_damage(&mut self, amount: u16) {
         match self.state {
             State::Alive { life } if amount >= life => self.state = Dead,
-            State::Alive { life } if amount >= life => self.state = Dead,
             State::Alive { life } => {
                 self.state = Alive {
                     life: life - amount,
