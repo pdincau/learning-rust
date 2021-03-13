@@ -12,19 +12,19 @@ It's just me trying to learn rust.
 Run checks:
 
 ```sh
-$ cargo check
+cargo check
 ```
 
 Run formatter:
 
 ```sh
-$ cargo fmt
+cargo fmt
 ```
 
 Run code:
 
 ```sh
-$ cargo run
+cargo run
 ```
 
 
