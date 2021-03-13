@@ -12,13 +12,31 @@ fn main() {
     more_stuff_on_structs();
     builder_pattern_not_easy();
     play_with_traits();
+    if_you_want_a_list_of_dynamic_traits()
 }
 
 fn play_with_traits() {
     let twitter = Twitter {};
     println!("{}", twitter.notify());
+
+    let notifications = vec![twitter];
+    for notification in notifications {
+        println!("{}", notification.notify());
+    }
+}
+
+fn if_you_want_a_list_of_dynamic_traits() {
+    let twitter = Twitter {};
+    println!("{}", twitter.notify());
     let facebook = Facebook {};
     println!("{}", facebook.notify());
+
+    let mut notifications: Vec<Box<dyn Notification>> = Vec::new();
+    notifications.push(Box::new(twitter));
+    notifications.push(Box::new(facebook));
+    for notification in notifications {
+        println!("{}", notification.notify());
+    }
 }
 
 fn builder_pattern_not_easy() {
