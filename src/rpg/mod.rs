@@ -1,4 +1,4 @@
-use crate::rpg::State::Alive;
+use crate::rpg::State::{Alive, Dead};
 
 #[derive(Copy, Clone)]
 struct Character {
@@ -25,7 +25,12 @@ impl Character {
     }
 
     fn receive_damage(&mut self, amount: u16) {
-        self.health -= amount
+        if amount >= self.health {
+            self.state = Dead;
+            self.health = 0;
+        } else {
+            self.health -= amount
+        }
     }
 }
 
@@ -49,6 +54,7 @@ enum State {
 mod tests {
     // Note this useful idiom: importing names from outer (for mod tests) scope.
     use super::*;
+    use crate::rpg::State::Dead;
 
     #[test]
     fn health_starts_at_1000() {
@@ -79,5 +85,16 @@ mod tests {
         attacker.deal_damage(&mut attackee, 10);
 
         assert_eq!(990, attackee.health());
+    }
+
+    #[test]
+    fn dies_when_damage_equals_health() {
+        let attacker = Character::default();
+        let mut attackee = Character::default();
+
+        attacker.deal_damage(&mut attackee, 1000);
+
+        assert_eq!(0, attackee.health());
+        assert_eq!(Dead, attackee.state());
     }
 }
