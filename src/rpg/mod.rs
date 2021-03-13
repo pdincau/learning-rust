@@ -28,14 +28,14 @@ impl Character {
 
     pub fn deal_damage(self, character: &mut Character, amount: u16) {
         if self.id == character.id {
-            return ()
+            return;
         }
         character.receive_damage(amount)
     }
 
     pub fn heal(&mut self) {
-            match self.state {
-            State::Alive { life: MAX_LIFE }  => (),
+        match self.state {
+            State::Alive { life: MAX_LIFE } => (),
             State::Alive { .. } => self.state = Alive { life: MAX_LIFE },
             Dead => (),
         }
@@ -136,5 +136,4 @@ mod tests {
 
         assert_eq!(Alive { life: 1000 }, attackee.status());
     }
-
 }
