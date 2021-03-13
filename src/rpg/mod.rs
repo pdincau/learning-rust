@@ -1,10 +1,10 @@
 struct Character {
-    health: u32,
+    health: u16,
     level: u16,
 }
 
 impl Character {
-    pub fn health(self) -> u32 {
+    pub fn health(self) -> u16 {
         self.health
     }
 
