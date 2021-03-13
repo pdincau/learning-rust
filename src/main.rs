@@ -1,6 +1,7 @@
 use crate::structs::cook::CookBuilder;
 use structs::developer::Developer;
 use structs::person::{greet, greet_without_borrowing, Person, Person2};
+use crate::traits::animal::{Twitter, Notification, Facebook};
 
 mod structs;
 mod traits;
@@ -10,6 +11,14 @@ fn main() {
     base_struct_and_function_without_borrowing();
     more_stuff_on_structs();
     builder_pattern_not_easy();
+    play_with_traits();
+}
+
+fn play_with_traits() {
+    let twitter = Twitter {};
+    println!("{}", twitter.notify());
+    let facebook = Facebook {};
+    println!("{}", facebook.notify());
 }
 
 fn builder_pattern_not_easy() {
