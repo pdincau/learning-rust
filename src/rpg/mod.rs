@@ -1,5 +1,7 @@
 use crate::rpg::State::{Alive, Dead};
 
+const MAX_LIFE: u16 = 1000;
+
 #[derive(Copy, Clone)]
 struct Character {
     level: u16,
@@ -44,8 +46,8 @@ impl Character {
 
     fn receive_healing(&mut self) {
         match self.state {
-            State::Alive { life: 1000 }  => (),
-            State::Alive { .. } => self.state = Alive { life: 1000 },
+            State::Alive { life: MAX_LIFE }  => (),
+            State::Alive { .. } => self.state = Alive { life: MAX_LIFE },
             Dead => (),
         }
     }
@@ -55,7 +57,7 @@ impl Default for Character {
     fn default() -> Self {
         Character {
             level: 1,
-            state: Alive { life: 1000 },
+            state: Alive { life: MAX_LIFE },
         }
     }
 }
