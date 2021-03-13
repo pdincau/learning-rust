@@ -1,9 +1,11 @@
 use crate::rpg::State::{Alive, Dead};
+use uuid::Uuid;
 
 const MAX_LIFE: u16 = 1000;
 
 #[derive(Copy, Clone)]
 struct Character {
+    id: Uuid,
     level: u16,
     state: State,
 }
@@ -25,11 +27,14 @@ impl Character {
     }
 
     pub fn deal_damage(self, character: &mut Character, amount: u16) {
+        if self.id == character.id {
+            return ()
+        }
         character.receive_damage(amount)
     }
 
     pub fn heal(&mut self) {
-        match self.state {
+            match self.state {
             State::Alive { life: MAX_LIFE }  => (),
             State::Alive { .. } => self.state = Alive { life: MAX_LIFE },
             Dead => (),
@@ -38,6 +43,7 @@ impl Character {
 
     fn receive_damage(&mut self, amount: u16) {
         match self.state {
+            State::Alive { life } if amount >= life => self.state = Dead,
             State::Alive { life } if amount >= life => self.state = Dead,
             State::Alive { life } => {
                 self.state = Alive {
@@ -52,6 +58,7 @@ impl Character {
 impl Default for Character {
     fn default() -> Self {
         Character {
+            id: Uuid::new_v4(),
             level: 1,
             state: Alive { life: MAX_LIFE },
         }
@@ -109,6 +116,15 @@ mod tests {
         attacker.deal_damage(&mut attackee, 1000);
 
         assert_eq!(Dead, attackee.status());
+    }
+
+    #[test]
+    fn cannot_deal_damage_to_itself() {
+        let mut attacker = Character::default();
+
+        attacker.deal_damage(&mut attacker, 10);
+
+        assert_eq!(Alive { life: 1000 }, attacker.status());
     }
 
     #[test]
