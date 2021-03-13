@@ -10,7 +10,7 @@ impl Character {
     pub fn health(self) -> u16 {
         match self.state {
             State::Alive { life } => life,
-            Dead => 0
+            Dead => 0,
         }
     }
 
@@ -28,16 +28,14 @@ impl Character {
 
     fn receive_damage(&mut self, amount: u16) {
         match self.state {
+            State::Alive { life } if amount >= life => self.state = Dead,
             State::Alive { life } => {
-                if amount >= life {
-                    self.state = Dead;
-                } else {
-                    self.state = Alive { life: life - amount }
+                self.state = Alive {
+                    life: life - amount,
                 }
-            },
-            Dead => ()
+            }
+            Dead => (),
         }
-
     }
 }
 

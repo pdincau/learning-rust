@@ -1,11 +1,11 @@
 use crate::structs::cook::CookBuilder;
+use crate::traits::animal::{Facebook, Notification, Twitter};
 use structs::developer::Developer;
 use structs::person::{greet, greet_without_borrowing, Person, Person2};
-use crate::traits::animal::{Twitter, Notification, Facebook};
 
+mod rpg;
 mod structs;
 mod traits;
-mod rpg;
 
 fn main() {
     base_struct_and_function();
