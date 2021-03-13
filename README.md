@@ -4,9 +4,9 @@ It's just me trying to learn rust.
 ### Topics:
 
 * [x] structs
-* [ ] builder pattern
-* [ ] vectors
+* [x] builder pattern
 * [ ] traits
+* [ ] vectors
 
 ### Cargo commands
 Run checks:

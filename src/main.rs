@@ -3,6 +3,7 @@ use structs::developer::Developer;
 use structs::person::{greet, greet_without_borrowing, Person, Person2};
 
 mod structs;
+mod traits;
 
 fn main() {
     base_struct_and_function();
