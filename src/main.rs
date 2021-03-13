@@ -5,6 +5,7 @@ use crate::traits::animal::{Twitter, Notification, Facebook};
 
 mod structs;
 mod traits;
+mod rpg;
 
 fn main() {
     base_struct_and_function();
