@@ -32,7 +32,7 @@ impl Character {
         self.state
     }
 
-    pub fn deal_damage(self, character: &mut Character, damage: Damage) {
+    pub fn attack(self, character: &mut Character, damage: Damage) {
         if self.id == character.id {
             return;
         }
@@ -42,7 +42,7 @@ impl Character {
         let weighted_damage =
             self.damage_calculator
                 .compute(attacker_level, attackee_level, amount);
-        character.receive_damage(weighted_damage)
+        character.decrease_life(weighted_damage)
     }
 
     pub fn heal(&mut self) {
@@ -53,7 +53,7 @@ impl Character {
         }
     }
 
-    fn receive_damage(&mut self, amount: u16) {
+    fn decrease_life(&mut self, amount: u16) {
         match self.state {
             State::Alive { life } if amount >= life => self.state = Dead,
             State::Alive { life } => {
@@ -93,7 +93,6 @@ enum State {
 mod tests {
     use crate::rpg::State::Dead;
 
-    // Note this useful idiom: importing names from outer (for mod tests) scope.
     use super::*;
 
     #[test]
@@ -124,7 +123,7 @@ mod tests {
 
         let attack = Damage { amount: 10, distance: 1 };
 
-        attacker.deal_damage(&mut attackee, attack);
+        attacker.attack(&mut attackee, attack);
 
         assert_eq!(Alive { life: 990 }, attackee.status());
     }
@@ -137,7 +136,7 @@ mod tests {
 
         let attack = Damage { amount: 10, distance: 1 };
 
-        attacker.deal_damage(&mut attackee, attack);
+        attacker.attack(&mut attackee, attack);
 
         assert_eq!(Alive { life: 995 }, attackee.status());
     }
@@ -150,7 +149,7 @@ mod tests {
 
         let attack = Damage { amount: 10, distance: 1 };
 
-        attacker.deal_damage(&mut attackee, attack);
+        attacker.attack(&mut attackee, attack);
 
         assert_eq!(Alive { life: 980 }, attackee.status());
     }
@@ -162,7 +161,7 @@ mod tests {
 
         let attack = Damage { amount: 1000, distance: 1 };
 
-        attacker.deal_damage(&mut attackee, attack);
+        attacker.attack(&mut attackee, attack);
 
         assert_eq!(Dead, attackee.status());
     }
@@ -173,7 +172,7 @@ mod tests {
 
         let attack = Damage { amount: 10, distance: 1 };
 
-        attacker.deal_damage(&mut attacker, attack);
+        attacker.attack(&mut attacker, attack);
 
         assert_eq!(Alive { life: 1000 }, attacker.status());
     }
@@ -184,7 +183,7 @@ mod tests {
         let mut attackee = Character::default();
 
         let attack = Damage { amount: 50, distance: 1 };
-        attacker.deal_damage(&mut attackee, attack);
+        attacker.attack(&mut attackee, attack);
 
         attackee.heal();
 
