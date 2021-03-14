@@ -1,5 +1,10 @@
-use crate::rpg::State::{Alive, Dead};
 use uuid::Uuid;
+
+use weighted_damage::WeightedDamage;
+
+use crate::rpg::State::{Alive, Dead};
+
+mod weighted_damage;
 
 const MAX_LIFE: u16 = 1000;
 
@@ -67,7 +72,7 @@ impl Default for Character {
             id: Uuid::new_v4(),
             level: 1,
             state: Alive { life: MAX_LIFE },
-            damage_calculator: Default::default()
+            damage_calculator: Default::default(),
         }
     }
 }
@@ -78,34 +83,12 @@ enum State {
     Dead,
 }
 
-#[derive(Copy, Clone)]
-struct WeightedDamage {
-    factor: u16,
-}
-
-impl Default for WeightedDamage {
-    fn default() -> Self {
-        WeightedDamage { factor: 5 }
-    }
-}
-
-impl WeightedDamage {
-    fn compute(&self, attacker_level: u16, attackee_level: u16, amount: u16) -> u16 {
-        if attackee_level >= self.factor * attacker_level {
-            amount / 2
-        } else if attacker_level >= self.factor * attackee_level {
-            amount * 2
-        } else {
-            amount
-        }
-    }
-}
-
 #[cfg(test)]
 mod tests {
+    use crate::rpg::State::Dead;
+
     // Note this useful idiom: importing names from outer (for mod tests) scope.
     use super::*;
-    use crate::rpg::State::Dead;
 
     #[test]
     fn health_starts_at_1000() {
