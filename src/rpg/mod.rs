@@ -32,13 +32,13 @@ impl Character {
         self.state
     }
 
-    pub fn deal_damage(self, character: &mut Character, damage: u16) {
+    pub fn deal_damage(self, character: &mut Character, damage: Damage) {
         if self.id == character.id {
             return;
         }
         let attacker_level = self.level;
         let attackee_level = character.level;
-        let amount = damage;
+        let amount = damage.amount;
         let weighted_damage =
             self.damage_calculator
                 .compute(attacker_level, attackee_level, amount);
@@ -64,6 +64,12 @@ impl Character {
             Dead => (),
         }
     }
+}
+
+
+struct Damage {
+    pub amount: u16,
+    pub distance: u16,
 }
 
 impl Default for Character {
@@ -116,7 +122,9 @@ mod tests {
         let attacker = Character::default();
         let mut attackee = Character::default();
 
-        attacker.deal_damage(&mut attackee, 10);
+        let attack = Damage { amount: 10, distance: 1 };
+
+        attacker.deal_damage(&mut attackee, attack);
 
         assert_eq!(Alive { life: 990 }, attackee.status());
     }
@@ -127,7 +135,9 @@ mod tests {
         let mut attackee = Character::default();
         attackee.level = 6;
 
-        attacker.deal_damage(&mut attackee, 10);
+        let attack = Damage { amount: 10, distance: 1 };
+
+        attacker.deal_damage(&mut attackee, attack);
 
         assert_eq!(Alive { life: 995 }, attackee.status());
     }
@@ -138,7 +148,9 @@ mod tests {
         attacker.level = 6;
         let mut attackee = Character::default();
 
-        attacker.deal_damage(&mut attackee, 10);
+        let attack = Damage { amount: 10, distance: 1 };
+
+        attacker.deal_damage(&mut attackee, attack);
 
         assert_eq!(Alive { life: 980 }, attackee.status());
     }
@@ -148,7 +160,9 @@ mod tests {
         let attacker = Character::default();
         let mut attackee = Character::default();
 
-        attacker.deal_damage(&mut attackee, 1000);
+        let attack = Damage { amount: 1000, distance: 1 };
+
+        attacker.deal_damage(&mut attackee, attack);
 
         assert_eq!(Dead, attackee.status());
     }
@@ -157,7 +171,9 @@ mod tests {
     fn cannot_deal_damage_to_itself() {
         let mut attacker = Character::default();
 
-        attacker.deal_damage(&mut attacker, 10);
+        let attack = Damage { amount: 10, distance: 1 };
+
+        attacker.deal_damage(&mut attacker, attack);
 
         assert_eq!(Alive { life: 1000 }, attacker.status());
     }
@@ -167,7 +183,9 @@ mod tests {
         let attacker = Character::default();
         let mut attackee = Character::default();
 
-        attacker.deal_damage(&mut attackee, 50);
+        let attack = Damage { amount: 50, distance: 1 };
+        attacker.deal_damage(&mut attackee, attack);
+
         attackee.heal();
 
         assert_eq!(Alive { life: 1000 }, attackee.status());
