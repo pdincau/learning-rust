@@ -1,12 +1,15 @@
 #[derive(Copy, Clone)]
 pub struct WeightedDamage {
     factor: u16,
-    level_gap: u16
+    level_gap: u16,
 }
 
 impl Default for WeightedDamage {
     fn default() -> Self {
-        WeightedDamage { level_gap: 5, factor: 2 }
+        WeightedDamage {
+            level_gap: 5,
+            factor: 2,
+        }
     }
 }
 
