@@ -35,4 +35,16 @@ mod tests {
 
         assert_eq!(200, weighted_damage)
     }
+
+
+    #[test]
+    fn when_attacker_level_is_5_below_attackee_damage_is_decreased_by_half() {
+        let attacker_level = 5;
+        let attackee_level = 10;
+
+        let weighted_damage =
+            WeightedDamage::default().compute(attacker_level, attackee_level, 100);
+
+        assert_eq!(50, weighted_damage)
+    }
 }
