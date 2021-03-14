@@ -30,7 +30,10 @@ impl Character {
         if self.id == character.id {
             return;
         }
-        let weighted_damage = weight_damage(self.level, character.level, damage);
+        let attacker_level = self.level;
+        let attackee_level = character.level;
+        let amount = damage;
+        let weighted_damage = DamageCalculator::damage_for(attacker_level, attackee_level, amount);
         character.receive_damage(weighted_damage)
     }
 
@@ -55,7 +58,7 @@ impl Character {
     }
 }
 
-fn weight_damage(attacker_level: u16, attackee_level: u16, amount: u16) -> u16 {
+fn DamageCalculator(attackee_level: u16, attacker_level: u16, amount: u16) -> u16 {
     if attackee_level >= 5 * attacker_level {
         amount / 2
     } else if attacker_level >= 5 * attackee_level {
