@@ -1,4 +1,4 @@
-mod weighted_damage;
-mod style;
-mod state;
 mod character;
+mod state;
+mod style;
+mod weighted_damage;

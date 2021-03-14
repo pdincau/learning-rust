@@ -18,7 +18,6 @@ struct Character {
 }
 
 impl Character {
-
     pub fn new(style: Style) -> Character {
         Character {
             style,
@@ -77,7 +76,6 @@ impl Character {
         }
     }
 }
-
 
 struct Damage {
     pub amount: u16,
@@ -195,4 +193,3 @@ mod tests {
         assert_eq!(Alive { life: 1000 }, attackee.status());
     }
 }
-
