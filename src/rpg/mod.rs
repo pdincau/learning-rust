@@ -58,6 +58,8 @@ impl Character {
 fn weight_damage(attacker_level: u16, attackee_level: u16, amount: u16) -> u16 {
     if attackee_level >= 5 * attacker_level {
         amount / 2
+    } else if attacker_level >= 5 * attackee_level {
+        amount * 2
     } else {
         amount
     }
@@ -117,7 +119,7 @@ mod tests {
     }
 
     #[test]
-    fn deals_decreased_damage_if_level_is_5_or_more_levels_above() {
+    fn deals_decreased_damage_if_level_is_5_or_more_levels_below() {
         let attacker = Character::default();
         let mut attackee = Character::default();
         attackee.level = 6;
@@ -125,6 +127,17 @@ mod tests {
         attacker.deal_damage(&mut attackee, 10);
 
         assert_eq!(Alive { life: 995 }, attackee.status());
+    }
+
+    #[test]
+    fn deals_increased_damage_if_level_is_5_or_more_levels_above() {
+        let mut attacker = Character::default();
+        attacker.level = 6;
+        let mut attackee = Character::default();
+
+        attacker.deal_damage(&mut attackee, 10);
+
+        assert_eq!(Alive { life: 980 }, attackee.status());
     }
 
     #[test]
