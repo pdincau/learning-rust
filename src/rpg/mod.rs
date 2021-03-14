@@ -1,12 +1,13 @@
 use uuid::Uuid;
 
+use state::State::{Alive, Dead};
+use state::State;
 use style::Style;
 use weighted_damage::WeightedDamage;
 
-use crate::rpg::State::{Alive, Dead};
-
 mod weighted_damage;
 mod style;
+mod state;
 
 const MAX_LIFE: u16 = 1000;
 
@@ -97,15 +98,9 @@ impl Default for Character {
     }
 }
 
-#[derive(Copy, Clone, Debug, PartialEq)]
-enum State {
-    Alive { life: u16 },
-    Dead,
-}
-
 #[cfg(test)]
 mod tests {
-    use crate::rpg::State::Dead;
+    use crate::rpg::state::State::Dead;
     use crate::rpg::style::Style::{Melee, Ranged};
 
     use super::*;
