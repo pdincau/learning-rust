@@ -1,20 +1,21 @@
 #[derive(Copy, Clone)]
 pub struct WeightedDamage {
     factor: u16,
+    level_gap: u16
 }
 
 impl Default for WeightedDamage {
     fn default() -> Self {
-        WeightedDamage { factor: 5 }
+        WeightedDamage { level_gap: 5, factor: 2 }
     }
 }
 
 impl WeightedDamage {
     pub fn compute(&self, attacker_level: u16, attackee_level: u16, amount: u16) -> u16 {
-        if attackee_level >= self.factor + attacker_level {
-            amount / 2
-        } else if attacker_level >= self.factor + attackee_level {
-            amount * 2
+        if attackee_level >= self.level_gap + attacker_level {
+            amount / self.factor
+        } else if attacker_level >= self.level_gap + attackee_level {
+            amount * self.factor
         } else {
             amount
         }
