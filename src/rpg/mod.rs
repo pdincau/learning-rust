@@ -12,11 +12,19 @@ const MAX_LIFE: u16 = 1000;
 struct Character {
     id: Uuid,
     level: u16,
+    style: Style,
     state: State,
     damage_calculator: WeightedDamage,
 }
 
 impl Character {
+
+    pub fn new(style: Style) -> Character {
+        Character {
+            style,
+            ..Character::default()
+        }
+    }
     pub fn health(self) -> u16 {
         match self.state {
             State::Alive { life } => life,
@@ -53,6 +61,10 @@ impl Character {
         }
     }
 
+    pub fn range(&self) -> u16 {
+        self.style.range()
+    }
+
     fn decrease_life(&mut self, amount: u16) {
         match self.state {
             State::Alive { life } if amount >= life => self.state = Dead,
@@ -76,6 +88,7 @@ impl Default for Character {
         Character {
             id: Uuid::new_v4(),
             level: 1,
+            style: Style::Melee,
             state: Alive { life: MAX_LIFE },
             damage_calculator: Default::default(),
         }
@@ -88,11 +101,27 @@ enum State {
     Dead,
 }
 
+#[derive(Copy, Clone, Debug, PartialEq)]
+enum Style {
+    Melee,
+    Ranged,
+}
+
+impl Style {
+    pub fn range(&self) -> u16 {
+        match *self {
+            Style::Melee => 2,
+            Style::Ranged => 5,
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use crate::rpg::State::Dead;
 
     use super::*;
+    use crate::rpg::Style::{Melee, Ranged};
 
     #[test]
     fn health_starts_at_1000() {
@@ -106,6 +135,15 @@ mod tests {
         let character = Character::default();
 
         assert_eq!(1, character.level());
+    }
+
+    #[test]
+    fn has_a_max_range_according_to_type() {
+        let melee_character = Character::new(Melee);
+        let ranged_character = Character::new(Ranged);
+
+        assert_eq!(2, melee_character.range());
+        assert_eq!(5, ranged_character.range());
     }
 
     #[test]
