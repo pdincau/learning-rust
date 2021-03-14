@@ -69,7 +69,6 @@ impl Character {
 
 struct Damage {
     pub amount: u16,
-    pub distance: u16,
 }
 
 impl Default for Character {
@@ -121,9 +120,7 @@ mod tests {
         let attacker = Character::default();
         let mut attackee = Character::default();
 
-        let attack = Damage { amount: 10, distance: 1 };
-
-        attacker.attack(&mut attackee, attack);
+        attacker.attack(&mut attackee, Damage { amount: 10 });
 
         assert_eq!(Alive { life: 990 }, attackee.status());
     }
@@ -134,9 +131,7 @@ mod tests {
         let mut attackee = Character::default();
         attackee.level = 6;
 
-        let attack = Damage { amount: 10, distance: 1 };
-
-        attacker.attack(&mut attackee, attack);
+        attacker.attack(&mut attackee, Damage { amount: 10 });
 
         assert_eq!(Alive { life: 995 }, attackee.status());
     }
@@ -147,9 +142,7 @@ mod tests {
         attacker.level = 6;
         let mut attackee = Character::default();
 
-        let attack = Damage { amount: 10, distance: 1 };
-
-        attacker.attack(&mut attackee, attack);
+        attacker.attack(&mut attackee, Damage { amount: 10 });
 
         assert_eq!(Alive { life: 980 }, attackee.status());
     }
@@ -159,9 +152,7 @@ mod tests {
         let attacker = Character::default();
         let mut attackee = Character::default();
 
-        let attack = Damage { amount: 1000, distance: 1 };
-
-        attacker.attack(&mut attackee, attack);
+        attacker.attack(&mut attackee, Damage { amount: 1000 });
 
         assert_eq!(Dead, attackee.status());
     }
@@ -170,9 +161,7 @@ mod tests {
     fn cannot_deal_damage_to_itself() {
         let mut attacker = Character::default();
 
-        let attack = Damage { amount: 10, distance: 1 };
-
-        attacker.attack(&mut attacker, attack);
+        attacker.attack(&mut attacker, Damage { amount: 10 });
 
         assert_eq!(Alive { life: 1000 }, attacker.status());
     }
@@ -182,8 +171,7 @@ mod tests {
         let attacker = Character::default();
         let mut attackee = Character::default();
 
-        let attack = Damage { amount: 50, distance: 1 };
-        attacker.attack(&mut attackee, attack);
+        attacker.attack(&mut attackee, Damage { amount: 50 });
 
         attackee.heal();
 
