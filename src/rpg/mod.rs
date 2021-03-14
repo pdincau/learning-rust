@@ -26,11 +26,12 @@ impl Character {
         self.state
     }
 
-    pub fn deal_damage(self, character: &mut Character, amount: u16) {
+    pub fn deal_damage(self, character: &mut Character, damage: u16) {
         if self.id == character.id {
             return;
         }
-        character.receive_damage(amount)
+        let weighted_damage = weight_damage(self.level, character.level, damage);
+        character.receive_damage(weighted_damage)
     }
 
     pub fn heal(&mut self) {
@@ -51,6 +52,14 @@ impl Character {
             }
             Dead => (),
         }
+    }
+}
+
+fn weight_damage(attacker_level: u16, attackee_level: u16, amount: u16) -> u16 {
+    if attackee_level >= 5 * attacker_level {
+        amount / 2
+    } else {
+        amount
     }
 }
 
@@ -105,6 +114,17 @@ mod tests {
         attacker.deal_damage(&mut attackee, 10);
 
         assert_eq!(Alive { life: 990 }, attackee.status());
+    }
+
+    #[test]
+    fn deals_decreased_damage_if_level_is_5_or_more_levels_above() {
+        let attacker = Character::default();
+        let mut attackee = Character::default();
+        attackee.level = 6;
+
+        attacker.deal_damage(&mut attackee, 10);
+
+        assert_eq!(Alive { life: 995 }, attackee.status());
     }
 
     #[test]
