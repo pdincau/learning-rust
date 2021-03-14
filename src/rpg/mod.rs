@@ -8,6 +8,7 @@ struct Character {
     id: Uuid,
     level: u16,
     state: State,
+    damage_calculator: WeightedDamage,
 }
 
 impl Character {
@@ -33,7 +34,9 @@ impl Character {
         let attacker_level = self.level;
         let attackee_level = character.level;
         let amount = damage;
-        let weighted_damage = DamageCalculator::damage_for(attacker_level, attackee_level, amount);
+        let weighted_damage =
+            self.damage_calculator
+                .compute(attacker_level, attackee_level, amount);
         character.receive_damage(weighted_damage)
     }
 
@@ -58,22 +61,13 @@ impl Character {
     }
 }
 
-fn DamageCalculator(attackee_level: u16, attacker_level: u16, amount: u16) -> u16 {
-    if attackee_level >= 5 * attacker_level {
-        amount / 2
-    } else if attacker_level >= 5 * attackee_level {
-        amount * 2
-    } else {
-        amount
-    }
-}
-
 impl Default for Character {
     fn default() -> Self {
         Character {
             id: Uuid::new_v4(),
             level: 1,
             state: Alive { life: MAX_LIFE },
+            damage_calculator: Default::default()
         }
     }
 }
@@ -82,6 +76,29 @@ impl Default for Character {
 enum State {
     Alive { life: u16 },
     Dead,
+}
+
+#[derive(Copy, Clone)]
+struct WeightedDamage {
+    factor: u16,
+}
+
+impl Default for WeightedDamage {
+    fn default() -> Self {
+        WeightedDamage { factor: 5 }
+    }
+}
+
+impl WeightedDamage {
+    fn compute(&self, attacker_level: u16, attackee_level: u16, amount: u16) -> u16 {
+        if attackee_level >= self.factor * attacker_level {
+            amount / 2
+        } else if attacker_level >= self.factor * attackee_level {
+            amount * 2
+        } else {
+            amount
+        }
+    }
 }
 
 #[cfg(test)]
