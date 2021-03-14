@@ -1,10 +1,12 @@
 use uuid::Uuid;
 
+use style::Style;
 use weighted_damage::WeightedDamage;
 
 use crate::rpg::State::{Alive, Dead};
 
 mod weighted_damage;
+mod style;
 
 const MAX_LIFE: u16 = 1000;
 
@@ -101,27 +103,12 @@ enum State {
     Dead,
 }
 
-#[derive(Copy, Clone, Debug, PartialEq)]
-enum Style {
-    Melee,
-    Ranged,
-}
-
-impl Style {
-    pub fn range(&self) -> u16 {
-        match *self {
-            Style::Melee => 2,
-            Style::Ranged => 5,
-        }
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use crate::rpg::State::Dead;
+    use crate::rpg::style::Style::{Melee, Ranged};
 
     use super::*;
-    use crate::rpg::Style::{Melee, Ranged};
 
     #[test]
     fn health_starts_at_1000() {
